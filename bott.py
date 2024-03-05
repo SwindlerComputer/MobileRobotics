@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-'''Hello to the world from ev3dev.org'''
+'''Assignment 1: EV3 Robot Task'''
 
 import time
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_D
 from ev3dev2.sensor.lego import UltrasonicSensor, GyroSensor, ColorSensor, TouchSensor
 from ev3dev2.sensor import INPUT_2, INPUT_3, INPUT_1
+from ev3dev2.button import Button
 
-# Initialize motors, ultrasonic sensor, and gyroscope
+# Initialize motors, ultrasonic sensor, gyroscope, and button
 motor = LargeMotor(OUTPUT_B)
 motor1 = LargeMotor(OUTPUT_D)
 sonar = UltrasonicSensor()
 gyro = GyroSensor(INPUT_2)
 color_sensor = ColorSensor(INPUT_3)
 touch_sensor = TouchSensor(INPUT_1)
+button = Button()
 
 def display_message(message):
     '''Display message on the console'''
@@ -20,10 +22,11 @@ def display_message(message):
 
 def wait_for_button_press():
     '''Wait for a button press event'''
-    while True:
-        if touch_sensor.is_pressed:
-            break
-        time.sleep(0.1)
+    display_message('Press any button to continue...')
+    button.wait_for_pressed()  # Wait for any button press
+    button.wait_for_released()  # Wait for the button to be released
+    display_message('Button pressed!')
+    time.sleep(1)  # Delay for stability
 
 def move_forward_until_obstacle():
     '''Move forward until an obstacle is detected'''
@@ -101,10 +104,8 @@ def main():
     display_message('Assignment 1')
 
     # Wait for button press
-    display_message('Waiting for button press...')
     wait_for_button_press()
 
-    # Clear the screen (optional, as it's not possible on EV3)
     # Move forward until obstacle
     display_message('Moving forward until obstacle...')
     move_forward_until_obstacle()
